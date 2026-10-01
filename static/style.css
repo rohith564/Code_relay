@@ -246,6 +246,21 @@ td {
     white-space: nowrap;
 }
 
+tr:hover{
+    background-color: rgba(255, 255, 255,0.86);
+    color: black;
+    font-size: larger;
+    border: #263951 solid 1px;
+}
+
+
+thead:hover{
+    background-color: rgba(255, 255, 255,0.86);
+    color: black;
+    font-size:30px;
+    border: #263951 solid 1px;
+}
+
 th {
     color: var(--muted);
     font-size: 12px;
