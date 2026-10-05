@@ -50,4 +50,4 @@ INSERT IGNORE INTO teams(team_name,member1,member2,login_code) VALUES
 
 INSERT IGNORE INTO questions(round_no,title,description) VALUES
 (1,'Second Largest Number','Write a program to find the second largest number in an array.'),
-(2,'Palindrome Check','Write a program to check whether a given string is a palindrome.');
+(2,'Palindrome Check','Write a program to check whether a given string is a palindrome. SAMPLE INPUT: str1="MOM" Sample Output: Palindrome');
