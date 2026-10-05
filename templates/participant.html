@@ -2,32 +2,32 @@
 {% block title %}Participant{% endblock %}
 {% block content %}
 <div class="hero">
-<div>
-<span class="eyebrow">Participant</span>
-<h1>{{ session.team_name }}</h1>
-<p>{{ session.member1 }} &amp; {{ session.member2 }}</p>
-</div>
-<div class="status">
-Round {{ event.round_no }}
-<strong>{{ event.status|upper }}</strong>
-</div>
+    <div>
+        <span class="eyebrow">Participant</span>
+        <h1>{{ session.team_name }}</h1>
+        <p>{{ session.member1 }} &amp; {{ session.member2 }}</p>
+    </div>
+    <div class="status">
+        Round {{ event.round_no }}
+        <strong>{{ event.status|upper }}</strong>
+    </div>
 </div>
 
 <div class="grid two">
-<section class="card">
-<h2>Current Phase</h2>
-<div class="big">{{ event.phase|title }}</div>
-</section>
+    <section class="card">
+        <h2>Current Phase</h2>
+        <div class="big">{{ event.phase|title }}</div>
+    </section>
 
-<section class="card">
-<h2>Question</h2>
-{% if question %}
-<h3>{{ question.title }}</h3>
-<p>{{ question.description }}</p>
-{% else %}
-<p>No question has been added for this round.</p>
-{% endif %}
-</section>
+    <section class="card">
+        <h2>Question</h2>
+        {% if question %}
+        <h3>{{ question.title }}</h3>
+        <p>{{ question.description }}</p>
+        {% else %}
+        <p>No question has been added for this round.</p>
+        {% endif %}
+    </section>
 </div>
 
 
@@ -46,7 +46,7 @@ Round {{ event.round_no }}
 
     <div class="timer">
         <small>Remaining</small>
-        <strong id="timer">10:00</strong>
+        <strong id="timer">--:--</strong>
     </div>
 
 </div>
@@ -61,19 +61,10 @@ Round {{ event.round_no }}
     </div>
 
 
-    <form
-        method="post"
-        action="{{ url_for('submit') }}"
-        id="submission-form"
-        onsubmit="return confirmSubmit()"
-    >
+    <form method="post" action="{{ url_for('submit') }}" id="submission-form" onsubmit="return confirmSubmit()">
 
         <!-- Question ID -->
-        <input
-            type="hidden"
-            name="question_id"
-            value="{{ question.id }}"
-        >
+        <input type="hidden" name="question_id" value="{{ question.id }}">
 
 
         <!--
@@ -81,12 +72,7 @@ Round {{ event.round_no }}
             Keep the name as elapsed_seconds
             because Flask should read this value.
         -->
-        <input
-            type="hidden"
-            name="elapsed_seconds"
-            id="elapsed"
-            value="0"
-        >
+        <input type="hidden" name="elapsed_seconds" id="elapsed" value="0">
 
 
         <label>Member submitting</label>
@@ -106,20 +92,11 @@ Round {{ event.round_no }}
 
         <label>Final code</label>
 
-        <textarea
-            class="code"
-            name="code"
-            placeholder="// Paste code from VS Code here"
-            id="code_base"
-            required 
-        ></textarea>
+        <textarea class="code" name="code" placeholder="// Paste code from VS Code here" id="code_base"
+            required></textarea>
 
 
-        <button
-            class="primary large"
-            type="submit"
-            style="margin: 20px 0px"
-        >
+        <button class="primary large" type="submit" style="margin: 20px 0px">
             Submit Code
         </button>
 
@@ -131,90 +108,81 @@ Round {{ event.round_no }}
 <div class="notice">Wait for the admin to start the round.</div>
 
 {% endif %}
-
 <script>
+let timerInterval = null;
 
-    // ==========================================
-    // 10 MINUTE COUNTDOWN
-    // ==========================================
+const duration = Number("{{ event.duration_seconds or 0 }}");
+const startTimeString = "{{ event.phase_started_at or '' }}";
+const status = "{{ event.status or '' }}";
 
-    const totalTime = 10.1 * 60; // 10 minutes
+console.log("duration =", duration);
+console.log("startTimeString =", startTimeString);
+console.log("status =", status);
 
-    let remaining = totalTime;
+if (status === "running" && duration > 0 && startTimeString !== "") {
 
+    const startTime = new Date(
+        startTimeString.replace(" ", "T") + "Z"
+    ).getTime();
 
-    // ==========================================
-    // UPDATE TIMER
-    // ==========================================
+    console.log("startTime =", startTime);
 
     function updateTimer() {
 
-        // Calculate minutes and seconds
-        const minutes = Math.floor(remaining / 60);
+        const now = Date.now();
 
+        const elapsed = Math.floor(
+            (now - startTime) / 1000
+        );
+
+        let remaining = duration - elapsed;
+
+        console.log("elapsed =", elapsed);
+        console.log("remaining =", remaining);
+
+        if (remaining < 0) {
+            remaining = 0;
+        }
+
+        const minutes = Math.floor(remaining / 60);
         const seconds = remaining % 60;
 
+        console.log("minutes =", minutes);
+        console.log("seconds =", seconds);
 
-        // Display countdown
         document.getElementById("timer").textContent =
             String(minutes).padStart(2, "0") +
             ":" +
             String(seconds).padStart(2, "0");
 
+        const elapsedInput = document.getElementById("elapsed");
 
-        // Calculate elapsed time
-        const elapsed = totalTime - remaining;
+        if (elapsedInput) {
+            elapsedInput.value = elapsed;
+        }
 
-
-        // Send elapsed time to Flask
-        document.getElementById("elapsed").value = elapsed;
-
-
-        // If time is finished
         if (remaining <= 0) {
 
             clearInterval(timerInterval);
 
             document.getElementById("timer").textContent = "00:00";
 
-            alert("Time is up!");
+            console.log("TIME UP");
 
-            return;
         }
-
-
-        // Decrease by 1 second
-        remaining--;
-
     }
-
-
-    // ==========================================
-    // START TIMER IMMEDIATELY
-    // ==========================================
 
     updateTimer();
 
+    timerInterval = setInterval(updateTimer, 1000);
 
-    // ==========================================
-    // RUN EVERY 1 SECOND
-    // ==========================================
+} else {
 
-    const timerInterval = setInterval(updateTimer, 1000);
+    document.getElementById("timer").textContent = "--:--";
 
+    console.log("Timer is not running.");
 
-    // ==========================================
-    // CONFIRM SUBMISSION
-    // ==========================================
-
-    function confirmSubmit() {
-
-        return confirm(
-            "Are you sure you want to submit your final code?"
-        );
-
-    }
-
+}
 </script>
 
 {% endblock %}

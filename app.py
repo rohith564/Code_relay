@@ -197,18 +197,85 @@ def admin_event():
     action = request.form["action"]
     db = get_db()
     cur = db.cursor()
-    if action == "round1":
-        cur.execute("""UPDATE event_control SET round_no=1,phase='discussion',
-                       status='running',phase_started_at=UTC_TIMESTAMP() WHERE id=1""")
-    elif action == "round2":
-        cur.execute("""UPDATE event_control SET round_no=2,phase='discussion',
-                       status='running',phase_started_at=UTC_TIMESTAMP() WHERE id=1""")
+
+        
+    if action == "round1-discussion":
+        cur.execute("""
+        UPDATE event_control
+        SET round_no=1,
+            phase='Discussion',
+            status='Discussing',
+            duration_seconds=125,
+            phase_started_at=UTC_TIMESTAMP()
+        WHERE id=1""")
+
+    elif action == "round1-Coding-member1":
+            cur.execute("""
+            UPDATE event_control
+            SET round_no=1,
+                phase='Coding',
+                status='running',
+                duration_seconds=302,
+                phase_started_at=UTC_TIMESTAMP()
+            WHERE id=1""")
+
+    elif action == "round1-Coding-member2":
+                cur.execute("""
+                UPDATE event_control
+                SET round_no=1,
+                    phase='Coding',
+                    status='running',
+                    duration_seconds=302,
+                    phase_started_at=UTC_TIMESTAMP()
+                WHERE id=1""")
+     
+
+    elif action == "round2-discussion":
+        cur.execute("""
+        UPDATE event_control
+        SET round_no=2,
+            phase='Discussion',
+            status='Discussing',
+            duration_seconds=302,
+            phase_started_at=UTC_TIMESTAMP()
+        WHERE id=1""")   
+        
+
+    elif action == "round2-Coding-member1":
+        cur.execute("""
+        UPDATE event_control
+        SET round_no=2,
+            phase='Coding',
+            status='running',
+            duration_seconds=602,
+            phase_started_at=UTC_TIMESTAMP()
+        WHERE id=1""")
+
+    
+    elif action == "round2-Coding-member2":
+        cur.execute("""
+        UPDATE event_control
+        SET round_no=2,
+            phase='Coding',
+            status='running',
+            duration_seconds=602,
+            phase_started_at=UTC_TIMESTAMP()
+        WHERE id=1""")
+
+        
+
+    elif action == "round2-waiting":
+            cur.execute("""UPDATE event_control SET round_no=2,phase='Waiting',
+                           status='Round 1 Ended Wait for Round 2',phase_started_at=UTC_TIMESTAMP() WHERE id=1""")
+    
     elif action == "finish":
         cur.execute("UPDATE event_control SET status='finished',phase='finished' WHERE id=1")
+
     elif action == "reset":
         cur.execute("DELETE FROM submissions")
         cur.execute("""UPDATE event_control SET round_no=1,phase='waiting',
                        status='waiting',phase_started_at=NULL WHERE id=1""")
+        
     db.commit()
     cur.close(); db.close()
     return redirect(url_for("admin_dashboard"))

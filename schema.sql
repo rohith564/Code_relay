@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS event_control (
  round_no INT DEFAULT 1,
  phase VARCHAR(30) DEFAULT 'waiting',
  status VARCHAR(30) DEFAULT 'waiting',
- phase_started_at DATETIME NULL
+ phase_started_at DATETIME NULL,
+ duration_seconds INT DEFAULT 0
 );
 
 INSERT IGNORE INTO event_control(id) VALUES (1);
@@ -51,3 +52,7 @@ INSERT IGNORE INTO teams(team_name,member1,member2,login_code) VALUES
 INSERT IGNORE INTO questions(round_no,title,description) VALUES
 (1,'Second Largest Number','Write a program to find the second largest number in an array.'),
 (2,'Palindrome Check','Write a program to check whether a given string is a palindrome. SAMPLE INPUT: str1="MOM" Sample Output: Palindrome');
+
+
+ALTER TABLE event_control
+ADD COLUMN duration_seconds INT DEFAULT 0;
