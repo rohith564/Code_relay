@@ -205,7 +205,7 @@ def admin_event():
         SET round_no=1,
             phase='Discussion',
             status='Discussing',
-            duration_seconds=125,
+            duration_seconds=305,
             phase_started_at=UTC_TIMESTAMP()
         WHERE id=1""")
 
@@ -215,7 +215,7 @@ def admin_event():
             SET round_no=1,
                 phase='Coding',
                 status='running',
-                duration_seconds=302,
+                duration_seconds=305,
                 phase_started_at=UTC_TIMESTAMP()
             WHERE id=1""")
 
@@ -225,7 +225,7 @@ def admin_event():
                 SET round_no=1,
                     phase='Coding',
                     status='running',
-                    duration_seconds=302,
+                    duration_seconds=305,
                     phase_started_at=UTC_TIMESTAMP()
                 WHERE id=1""")
      
@@ -236,7 +236,7 @@ def admin_event():
         SET round_no=2,
             phase='Discussion',
             status='Discussing',
-            duration_seconds=302,
+            duration_seconds=305,
             phase_started_at=UTC_TIMESTAMP()
         WHERE id=1""")   
         
@@ -247,7 +247,7 @@ def admin_event():
         SET round_no=2,
             phase='Coding',
             status='running',
-            duration_seconds=602,
+            duration_seconds=605,
             phase_started_at=UTC_TIMESTAMP()
         WHERE id=1""")
 
@@ -258,7 +258,7 @@ def admin_event():
         SET round_no=2,
             phase='Coding',
             status='running',
-            duration_seconds=602,
+            duration_seconds=605,
             phase_started_at=UTC_TIMESTAMP()
         WHERE id=1""")
 
