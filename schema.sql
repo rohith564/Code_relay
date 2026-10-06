@@ -53,6 +53,3 @@ INSERT IGNORE INTO questions(round_no,title,description) VALUES
 (1,'Second Largest Number','Write a program to find the second largest number in an array.'),
 (2,'Palindrome Check','Write a program to check whether a given string is a palindrome. SAMPLE INPUT: str1="MOM" Sample Output: Palindrome');
 
-
-ALTER TABLE event_control
-ADD COLUMN duration_seconds INT DEFAULT 0;
