@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "#2p9Rc2v9v.")
+app.secret_key = os.getenv("SECRET_KEY")
 
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
