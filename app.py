@@ -207,7 +207,7 @@ def admin_event():
         SET round_no=1,
             phase='Discussion',
             status='Discussing',
-            duration_seconds=6,
+            duration_seconds=125,
             phase_started_at=UTC_TIMESTAMP()
         WHERE id=1""")
 
